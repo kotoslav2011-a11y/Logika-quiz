@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#264b3a">
+    <meta name="description" content="Перевір знання про лікарські рослини у травницькому квізі.">
+    <title>The Apothecary Diaries</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="backdrop" aria-hidden="true"></div>
+    <header class="topbar">
+        <a class="brand" href="#" aria-label="The Apothecary Diaries"><span class="brand-mark" aria-hidden="true">🌿</span><span>The Apothecary Diaries</span></a>
+        <div class="topbar-actions">
+            <button class="sound-toggle" id="sound-toggle" type="button" aria-label="Вимкнути звуки" title="Вимкнути звуки">
+                <span id="sound-icon" aria-hidden="true">🔊</span>
+            </button>
+            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Увімкнути темну тему" title="Увімкнути темну тему">
+                <span id="theme-icon" aria-hidden="true">🌙</span>
+            </button>
+            <div class="menu-wrap">
+                <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="language-menu">
+                    <span aria-hidden="true">☰</span> <span data-i18n="menu">Меню</span>
+                </button>
+                <nav class="language-menu" id="language-menu" aria-label="Мова сайту" hidden>
+                    <p data-i18n="chooseLanguage">Оберіть мову</p>
+                    <div id="language-options"></div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <nav class="feature-nav" aria-label="Інструменти квізу" data-i18n-aria-label="toolNav">
+        <button class="feature-button" id="study-mode-btn" type="button" data-i18n="studyMode">📖 Навчання</button>
+        <button class="feature-button" id="encyclopedia-btn" type="button" data-i18n="encyclopedia">🌿 Енциклопедія</button>
+        <button class="feature-button" id="identify-btn" type="button" data-i18n="identifyPlants">🔎 Впізнай рослину</button>
+        <button class="feature-button" id="stats-btn" type="button" data-i18n="statistics">📊 Статистика</button>
+        <button class="feature-button" id="sound-settings-btn" type="button" data-i18n="soundSettings">🔊 Звук</button>
+    </nav>
+
+    <main class="stage">
+        <section class="quiz-card" aria-live="polite">
+            <img class="side-character side-character-left" src="Ліво.png" alt="" aria-hidden="true">
+            <img class="side-character side-character-right" src="Право.png" alt="" aria-hidden="true">
+
+            <section class="screen start-screen" id="start-screen">
+                <p class="kicker"><span></span><span data-i18n="kicker">АПТЕКАРСЬКІ ЗАПИСИ</span><span></span></p>
+                <h1 data-i18n="welcome">Вітаємо у квізі!</h1>
+                <p class="intro" data-i18n="intro">Перевір свої знання з Травництва</p>
+                <div class="herb-divider" aria-hidden="true">✿　❧　✿</div>
+                <fieldset class="profile-box">
+                    <legend data-i18n="profileTitle">Знайомство</legend>
+                    <label class="profile-name-label" for="player-name" data-i18n="nameLabel">Як до тебе звертатися? (необов’язково)</label>
+                    <input id="player-name" name="player-name" type="text" maxlength="24" autocomplete="nickname" data-i18n-placeholder="namePlaceholder" placeholder="Твоє ім’я">
+                    <label class="profile-name-label" for="address-form" data-i18n="addressLabel">Форма звертання</label>
+                    <select id="address-form" name="address-form">
+                        <option value="neutral" data-i18n="addressNeutral">Нейтральна</option>
+                        <option value="masculine" data-i18n="addressMasculine">Чоловіча</option>
+                        <option value="feminine" data-i18n="addressFeminine">Жіноча</option>
+                    </select>
+                </fieldset>
+                <h2 class="level-title" data-i18n="chooseLevel">Обери рівень складності</h2>
+                <div class="difficulty-options" role="group" aria-label="Рівень складності">
+                    <button class="difficulty-option is-selected" type="button" data-difficulty="easy" aria-pressed="true">
+                        <span class="level-number">01</span><span class="level-name" data-i18n="easy">Легко</span><span class="level-time" data-time="30">30 с · 10 запитань</span>
+                    </button>
+                    <button class="difficulty-option" type="button" data-difficulty="normal" aria-pressed="false">
+                        <span class="level-number">02</span><span class="level-name" data-i18n="normal">Нормально</span><span class="level-time" data-time="20">20 с · 10 запитань</span>
+                    </button>
+                    <button class="difficulty-option" type="button" data-difficulty="hard" aria-pressed="false">
+                        <span class="level-number">03</span><span class="level-name" data-i18n="hard">Складно</span><span class="level-time" data-time="12">12 с · 10 запитань</span>
+                    </button>
+                    <button class="difficulty-option" type="button" data-difficulty="hardcore" aria-pressed="false">
+                        <span class="level-number">04</span><span class="level-name" data-i18n="hardcore">Хардкорно</span><span class="level-time" data-time="8">8 с · 10 запитань</span>
+                    </button>
+                </div>
+                <button class="primary-button" id="start-btn" type="button">
+                    <span data-i18n="start">Почати квіз</span><span aria-hidden="true">→</span>
+                </button>
+            </section>
+
+            <section class="screen quiz-screen" id="quiz-screen" hidden>
+                <button class="quiz-home-button" id="quiz-finish-btn" type="button" data-i18n-aria-label="finishQuiz">
+                    <span data-i18n="finishQuiz">Завершити квіз</span>
+                </button>
+                <div class="quiz-header">
+                    <span class="level-chip" id="level-chip">Легко</span>
+                    <span class="study-chip" id="study-chip" hidden data-i18n="studyMode">Режим навчання</span>
+                    <span class="question-count" id="question-count">01 / 10</span>
+                </div>
+                <div class="progress-track"><span id="progress-fill"></span></div>
+                <div class="stats">
+                    <span id="timer-stat"><span data-i18n="time">Час</span> <strong id="timer">30</strong></span>
+                    <span><span data-i18n="score">Бали</span> <strong id="score">0</strong></span>
+                    <span><span data-i18n="streak">Серія</span> <strong id="streak">0</strong> 🔥</span>
+                </div>
+                <h2 id="question-text"></h2>
+                <div class="answers" id="answers"></div>
+                <p class="hint" id="hint" aria-live="polite"></p>
+                <div class="timer-track"><span id="timer-fill"></span></div>
+            </section>
+
+            <section class="screen identify-screen" id="identify-screen" hidden>
+                <button class="quiz-home-button" id="identify-finish-btn" type="button" data-i18n="finishShort" data-i18n-aria-label="finishShort">Завершити</button>
+                <div class="quiz-header">
+                    <span class="level-chip" data-i18n="identifyPlants">Впізнай рослину</span>
+                    <span class="question-count" id="identify-count"></span>
+                </div>
+                <div class="identify-illustration" id="identify-illustration" aria-hidden="true"></div>
+                <h2 class="identify-prompt" id="identify-prompt" data-i18n="identifyPrompt">Яку рослину зображено?</h2>
+                <div class="answers" id="identify-answers"></div>
+                <p class="identify-feedback" id="identify-feedback" aria-live="polite"></p>
+                <section class="identify-mistake-review mistake-review" id="identify-mistake-review" hidden>
+                    <h3 data-i18n="mistakeTitle">Запитання для повторення</h3>
+                    <ul id="identify-mistake-list"></ul>
+                    <button class="secondary-button" id="identify-retry-mistakes-btn" type="button" data-i18n="retryMistakes">Повторити помилки</button>
+                </section>
+                <div class="earned-badges" id="identify-earned-badges"></div>
+                <div class="identify-result-actions" id="identify-result-actions" hidden>
+                    <button class="secondary-button" id="identify-restart-btn" type="button"><span data-i18n="again">Спробувати ще</span><span aria-hidden="true">↻</span></button>
+                    <button class="text-button" id="identify-home-btn" type="button" data-i18n="home">На головну</button>
+                </div>
+            </section>
+
+            <section class="screen result-screen" id="result-screen" hidden>
+                <p class="kicker"><span></span><span data-i18n="resultKicker">АПТЕКАРСЬКІ ЗАПИСИ</span><span></span></p>
+                <div class="result-flower"><img src="https://cdn.phototourl.com/member/2026-11-06-8fbd343a-a641-41e3-af3b-768239357a0b.png" alt="" loading="lazy"></div>
+                <h2 data-i18n="finished">Квіз завершено!</h2>
+                <p class="result-summary" id="result-summary"></p>
+                <div class="result-score"><strong id="final-score"></strong><span id="final-percent"></span></div>
+                <p class="streak-summary" id="streak-summary"></p>
+                <p class="result-message" id="result-message"></p>
+                <p class="record-message" id="record-message"></p>
+                <div class="earned-badges" id="earned-badges"></div>
+                <section class="mistake-review" id="mistake-review" hidden>
+                    <h3 data-i18n="mistakeTitle">Повтори запитання</h3>
+                    <ul id="mistake-list"></ul>
+                    <button class="secondary-button" id="retry-mistakes-btn" type="button" data-i18n="retryMistakes">Повторити помилки</button>
+                </section>
+                <button class="primary-button" id="restart-btn" type="button"><span data-i18n="again">Спробувати ще</span><span aria-hidden="true">↻</span></button>
+                <button class="text-button" id="home-btn" type="button" data-i18n="home">На головну</button>
+            </section>
+
+            <div class="reaction" id="reaction" hidden aria-live="assertive">
+                <img id="reaction-image" alt="">
+                <p id="reaction-label"></p>
+                <div class="fact-box" id="fact-box" hidden>
+                    <strong data-i18n="didYouKnow">Цікавий факт</strong>
+                    <p id="fact-text"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <dialog class="feature-dialog" id="encyclopedia-dialog" aria-labelledby="encyclopedia-title">
+        <div class="dialog-heading">
+            <h2 id="encyclopedia-title" data-i18n="encyclopedia">Енциклопедія рослин</h2>
+            <button class="dialog-close" type="button" data-close-dialog aria-label="Закрити" data-i18n-aria-label="close">×</button>
+        </div>
+        <p class="dialog-intro" data-i18n="encyclopediaIntro">Короткі нотатки про рослини з квізу.</p>
+        <div class="encyclopedia-grid" id="encyclopedia-list"></div>
+        <p class="safety-note" data-i18n="plantSafety">Навчальна довідка. Не вживай дикорослі рослини без точного визначення та поради фахівця.</p>
+    </dialog>
+
+    <dialog class="feature-dialog" id="stats-dialog" aria-labelledby="stats-title">
+        <div class="dialog-heading">
+            <h2 id="stats-title" data-i18n="statistics">Твій прогрес</h2>
+            <button class="dialog-close" type="button" data-close-dialog aria-label="Закрити" data-i18n-aria-label="close">×</button>
+        </div>
+        <div class="stats-grid" id="stats-content"></div>
+        <button class="secondary-button" id="reset-stats-btn" type="button" data-i18n="resetStats">Скинути статистику</button>
+    </dialog>
+
+    <dialog class="feature-dialog sound-dialog" id="sound-dialog" aria-labelledby="sound-title">
+        <div class="dialog-heading">
+            <h2 id="sound-title" data-i18n="soundSettings">Звук</h2>
+            <button class="dialog-close" type="button" data-close-dialog aria-label="Закрити" data-i18n-aria-label="close">×</button>
+        </div>
+        <label class="sound-setting" for="volume-range">
+            <span data-i18n="volumeLabel">Гучність ефектів</span>
+            <output id="volume-value" for="volume-range">80%</output>
+        </label>
+        <input id="volume-range" type="range" min="0" max="100" step="1" value="80">
+        <p class="setting-note" data-i18n="volumeNote">Гучність налаштовується для звуків сайту; системний рівень пристрою не змінюється.</p>
+        <label class="setting-check"><input id="hover-sound-toggle" type="checkbox" checked><span data-i18n="hoverSound">Звук</span></label>
+        <button class="secondary-button" id="sound-test-btn" type="button" data-i18n="testSound">Перевірити звук</button>
+    </dialog>
+</body>
+</html>
